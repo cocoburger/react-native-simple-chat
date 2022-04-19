@@ -2,6 +2,7 @@ import {ThemeProvider} from "styled-components";
 import {StatusBar, Image} from "react-native";
 import {useState} from "react";
 import {Asset} from 'expo-asset';
+import Navigation from './navigations'
 import AppLoading from 'expo-app-loading';
 import * as Font from 'expo-font';
 import {theme } from './theme';
@@ -37,6 +38,7 @@ const cacheFonts = fonts => {
         return isReady ? (
             <ThemeProvider theme={theme}>
                 <StatusBar barStyle='dark-content'/>
+                <Navigation />
             </ThemeProvider>
         ) : (
             <AppLoading
