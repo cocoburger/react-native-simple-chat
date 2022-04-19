@@ -2,6 +2,7 @@ import {ThemeProvider} from "styled-components";
 import {StatusBar, Image} from "react-native";
 import {useState} from "react";
 import {Asset} from 'expo-asset';
+import { images } from "./utils/Image";
 import Navigation from './navigations'
 import AppLoading from 'expo-app-loading';
 import * as Font from 'expo-font';
@@ -30,7 +31,13 @@ const cacheFonts = fonts => {
         const [isReady, setIsReady] = useState(false);
 
         const _loadAssets = async () => {
-            const imageAssets = cacheImages([require('../assets/splash.png')]);
+
+            /**
+             *  불러올 images를 import 한 후에 아래에 넣어준다.
+             */
+            const imageAssets = cacheImages([
+                require('../assets/splash.png'), ...Object.values(images),
+            ]);
             const fontAssets = cacheFonts([]);
 
             await Promise.all([...imageAssets, ...fontAssets]);
