@@ -1,7 +1,6 @@
-import React from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components';
-import {Button} from 'react-native';
-import Image from '../components/Image';
+import {Input, Image} from '../components/Index';
 import { images } from "../utils/Image";
 
 const Container = styled.View`
@@ -9,13 +8,21 @@ const Container = styled.View`
   justify-content: center;
   align-items: center;
   background-color: ${({ theme }) => theme.background};
+  padding: 20px;
 `;
 
 const Login = ({ navigation }) => {
+        const [email, setEmail] = useState("");
+        const [password, setPassword] = useState('');
     return (
         <Container>
             <Image url={images.logo} imageStyle={{ borderRadius: 8}}/>
-            <Button title="Signup" onPress={() => navigation.navigate('Signup')} />
+            <Input label="Email" onChangeText={text => setEmail(text)} value={email} onSubmitEditing={() => {}}
+                   placeholder="이메일" returnKeyType="next"
+            />
+            <Input label="Password" onChangeText={text => setPassword(text)} value={password} onSubmitEditing={() => {}}
+                   placeholder="패스워드입력" returnKeyType="done" isPassword
+            />
         </Container>
     );
 };
