@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import {Input, Image} from '../components/Index';
 import { images } from "../utils/Image";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
+import {validateEmail, removeWhitespace } from "../utils/Common";
 
 const Container = styled.View`
   flex: 1;
