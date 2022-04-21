@@ -13,6 +13,15 @@ const Container = styled.View`
   padding: 20px;
 `;
 
+const ErrorText = styled.Text`
+  align-items: flex-start;
+  width: 100%;
+  height: 20px;
+  margin-bottom: 10px;
+  line-height: 20px;
+  color: ${({theme}) => theme.errorText};
+`;
+
 const Login = ({ navigation }) => {
         const [email, setEmail] = useState("");
         const [password, setPassword] = useState('');
