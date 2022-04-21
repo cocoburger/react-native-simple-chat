@@ -9,10 +9,6 @@ npm-debug.*
 *.mobileprovision
 *.orig.*
 web-build/
-yarn.lock
-package.json
-package-lock.json
-firebase.json
 
 # macOS
 .DS_Store
