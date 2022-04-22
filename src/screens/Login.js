@@ -29,6 +29,7 @@ const Login = ({ navigation }) => {
         const [errorMessage, setErrorMessage] = useState('');
         const [disabled, setDisabled] = useState(true);
         //email, password, errorMessage 이메일과 패스워드가 입력되었이야하고, 에러메세지가 없을 때 활성화되어야한다.
+        // 자바스크립트는 공백일 경우 false 값이기때문이다.
         useEffect(() => {
             setDisabled(!(email && password && !errorMessage));
         }, [email, password, errorMessage]);
