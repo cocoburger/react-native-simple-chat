@@ -1,6 +1,6 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import styled from 'styled-components';
-import {Input, Image} from '../components/Index';
+import {Input, Image, Button} from '../components/Index';
 import { images } from "../utils/Image";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 import {validateEmail, removeWhitespace } from "../utils/Common";
@@ -17,7 +17,6 @@ const ErrorText = styled.Text`
   align-items: flex-start;
   width: 100%;
   height: 20px;
-  margin-bottom: 10px;
   line-height: 20px;
   color: ${({theme}) => theme.errorText};
 `;
@@ -25,7 +24,32 @@ const ErrorText = styled.Text`
 const Login = ({ navigation }) => {
         const [email, setEmail] = useState("");
         const [password, setPassword] = useState('');
-        const  passwordRef = useRef(); // 이메일에서 next 버튼 클릭 시(onSubmitEditing에 걸어둔 이벤트가 실행)에 password로 포커스 이동 시키기 위해 만든 ref
+        const passwordRef = useRef(); // 이메일에서 next 버튼 클릭 시(onSubmitEditing에 걸어둔 이벤트가 실행)에 password로 포커스 이동 시키기 위해 만든 ref
+
+        const [errorMessage, setErrorMessage] = useState('');
+        const [disabled, setDisabled] = useState(true);
+        //email, password, errorMessage 이메일과 패스워드가 입력되었이야하고, 에러메세지가 없을 때 활성화되어야한다.
+        useEffect(() => {
+            setDisabled(!(email && password && !errorMessage));
+        }, [email, password, errorMessage]);
+
+        const _handleEmailChange = email => {
+            const changedEmail = removeWhitespace(email);
+            setEmail(changedEmail);
+            if(email === '') {
+                setErrorMessage('');
+            }else {
+                setErrorMessage(
+                    validateEmail(changedEmail) ? '' : '이메일 확인 해보세요~'
+                );
+            }
+
+        };
+        const _handlePasswordChange = password => {
+            setPassword(removeWhitespace(password));
+        };
+
+        const _handleLoginButtonPress = () => {};
 
     return (
         <KeyboardAwareScrollView
@@ -34,14 +58,19 @@ const Login = ({ navigation }) => {
         >
             <Container>
                 <Image url={images.logo} imageStyle={{ borderRadius: 8}}/>
-                <Input label="Email" onChangeText={text => setEmail(text)} value={email} onSubmitEditing={() => passwordRef.current.focus()}
+                <Input label="Email" onChangeText={_handleEmailChange} value={email} onSubmitEditing={() => passwordRef.current.focus()}
                        placeholder="이메일" returnKeyType="next"
                 />
+                <ErrorText>{errorMessage}</ErrorText>
+
                 {/* ref를 password input으로 지정.*/}
                 <Input ref={passwordRef}
-                       label="Password" onChangeText={text => setPassword(text)} value={password} onSubmitEditing={() =>{} }
+                       label="Password" onChangeText={_handlePasswordChange} value={password} onSubmitEditing={_handleLoginButtonPress }
                        placeholder="패스워드입력" returnKeyType="done" isPassword
                 />
+                <Button title="로그인" onPress={_handleLoginButtonPress} disabled={disabled} />
+                <Button title="이메일로 가입하기" onPress={() => navigation.navigate('Signup')}
+                        isFilled={false}/>
             </Container>
         </KeyboardAwareScrollView>
     );
