@@ -4,13 +4,16 @@ import {Input, Image, Button} from '../components/Index';
 import { images } from "../utils/Image";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 import {validateEmail, removeWhitespace } from "../utils/Common";
+import {useSafeAreaInsets} from "react-native-safe-area-context";
 
 const Container = styled.View`
   flex: 1;
   justify-content: center;
   align-items: center;
   background-color: ${({ theme }) => theme.background};
-  padding: 20px;
+  padding: 0 20px;
+  padding-top: ${({ insets: { top }}) => top}px;
+  padding-bottom: ${({insets : { bottom } }) => bottom}px;
 `;
 
 const ErrorText = styled.Text`
@@ -22,6 +25,7 @@ const ErrorText = styled.Text`
 `;
 
 const Login = ({ navigation }) => {
+    const insets = useSafeAreaInsets();
         const [email, setEmail] = useState("");
         const [password, setPassword] = useState('');
         const passwordRef = useRef(); // 이메일에서 next 버튼 클릭 시(onSubmitEditing에 걸어둔 이벤트가 실행)에 password로 포커스 이동 시키기 위해 만든 ref
@@ -57,7 +61,7 @@ const Login = ({ navigation }) => {
             contentContainerStyle={{ flex: 1}}
             extraScrollHeight={20}
         >
-            <Container>
+            <Container insets={insets}>
                 <Image url={images.logo} imageStyle={{ borderRadius: 8}}/>
                 <Input label="Email" onChangeText={_handleEmailChange} value={email} onSubmitEditing={() => passwordRef.current.focus()}
                        placeholder="이메일" returnKeyType="next"
