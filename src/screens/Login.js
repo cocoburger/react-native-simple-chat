@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, {useState, useRef, useEffect, useContext} from 'react';
 import styled from 'styled-components';
 import {Input, Image, Button} from '../components/Index';
 import { images } from "../utils/Image";
@@ -7,6 +7,7 @@ import {login} from "../utils/firebase";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 import {validateEmail, removeWhitespace } from "../utils/Common";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
+import { ProgressContext} from "../contexts";
 
 const Container = styled.View`
   flex: 1;
@@ -27,6 +28,8 @@ const ErrorText = styled.Text`
 `;
 
 const Login = ({ navigation }) => {
+    const { spinner } = useContext(ProgressContext);
+
     const insets = useSafeAreaInsets();
         const [email, setEmail] = useState("");
         const [password, setPassword] = useState('');
@@ -58,10 +61,13 @@ const Login = ({ navigation }) => {
 
         const _handleLoginButtonPress = async () => {
             try {
+                spinner.start();
                 const user = await login({email, password});
                 Alert.alert('Login 성공', user.email);
             } catch (e) {
                 Alert.alert('LOGIN Error', e.message());
+            }finally {
+                spinner.stop();
             }
         };
 

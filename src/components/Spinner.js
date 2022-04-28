@@ -20,7 +20,7 @@ const Spinner = () => {
         <Container>
             <ActivityIndicator size={'large'} colro={theme.spinnerIndicator} />
         </Container>
-    );
+    );``
 };
 
 export default Spinner;
