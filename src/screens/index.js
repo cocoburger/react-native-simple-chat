@@ -1,6 +1,7 @@
 import Login from './Login';
 import Signup from "./Signup";
-
-export {Login, Signup};
+import ChannelCreation from "./ChannelCreation";
+import Channel from "./Channel";
+export {Login, Signup, Channel, ChannelCreation};
 
 
