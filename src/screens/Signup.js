@@ -73,7 +73,7 @@ const Signup = () => {
 
     const _handleSignupButtonPress = async () => {
         try{
-            const user = await signup({email,password});
+            const user = await signup({email,password, name, photoUrl});
             console.log(user);
             Alert.alert('회원가입 성공', user.email);
         } catch (e) {
