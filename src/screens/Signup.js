@@ -4,7 +4,8 @@ import {Image, Input, Button} from '../components/Index';
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import  { validateEmail, removeWhitespace } from "../utils/Common";
 import {images} from "../utils/Image";
-
+import {Alert} from 'react-native';
+import { signup } from "../utils/firebase";
 
 const Container = styled.View`
   flex: 1;
@@ -70,7 +71,15 @@ const Signup = () => {
         );
     }, [name, email, password, passwordConfirm, errorMessage]);
 
-    const _handleSignupButtonPress = () => {};
+    const _handleSignupButtonPress = async () => {
+        try{
+            const user = await signup({email,password});
+            console.log(user);
+            Alert.alert('회원가입 성공', user.email);
+        } catch (e) {
+            Alert.alert('회원가입 실패', e.message());
+        }
+    };
     return (
         <KeyboardAwareScrollView
             contentContainerStyle={{ flex : 1}}

@@ -2,6 +2,8 @@ import React, {useState, useRef, useEffect} from 'react';
 import styled from 'styled-components';
 import {Input, Image, Button} from '../components/Index';
 import { images } from "../utils/Image";
+import { Alert} from 'react-native';
+import {login} from "../utils/firebase";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 import {validateEmail, removeWhitespace } from "../utils/Common";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
@@ -54,7 +56,14 @@ const Login = ({ navigation }) => {
             setPassword(removeWhitespace(password));
         };
 
-        const _handleLoginButtonPress = () => {};
+        const _handleLoginButtonPress = async () => {
+            try {
+                const user = await login({email, password});
+                Alert.alert('Login 성공', user.email);
+            } catch (e) {
+                Alert.alert('LOGIN Error', e.message());
+            }
+        };
 
     return (
         <KeyboardAwareScrollView
