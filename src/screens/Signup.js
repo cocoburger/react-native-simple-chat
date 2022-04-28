@@ -77,7 +77,12 @@ const Signup = () => {
             extraScrollHeight={20}
         >
             <Container>
-                <Image rounded url={photoUrl} showButton/>
+                <Image
+                    rounded
+                    url={photoUrl}
+                    showButton
+                    onChangeImage={url => setPhotoUrl(url)}
+                />
                 <Input label="이름" onChangeText={text => setName(text)} value={name} onSubmitEditing={() => {
                     setName(name.trim());
                     emailRef.current.focus()

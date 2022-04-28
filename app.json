@@ -5,11 +5,22 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
+    "plugins": [
+      [
+        "expo-media-library",
+        {
+          "photosPermission": "Allow 간단채팅 to access your photos.",
+          "savePhotosPermission": "Allow 간단채팅 to save photos.",
+          "isAccessMediaLocationEnabled": false
+        }
+      ]
+    ],
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#3679fe"
     },
+
     "updates": {
       "fallbackToCacheTimeout": 0
     },

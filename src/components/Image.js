@@ -1,8 +1,7 @@
 import React, {useEffect} from 'react';
 import { Platform, Alert} from "react-native";
 import * as ImagePicker from 'expo-image-picker';
-import * as Permissions from 'expo-permissions';
-
+import * as MediaLibrary from 'expo-media-library';
 import styled from "styled-components/native";
 import PropTypes from 'prop-types';
 import {MaterialIcons} from '@expo/vector-icons';
@@ -52,10 +51,55 @@ const PhotoButton = ({ onPress }) => {
 }
 
 const Image = ({ url, imageStyle, rounded, showButton, onChangeImage }) => {
+    useEffect(() => {
+        (async () => {
+            try {
+                if(Platform.OS === 'ios') {
+                    const {status} =  await MediaLibrary.requestPermissionsAsync();
+
+                    if(status !== 'granted') {
+                        Alert.alert(
+                            '사진 허가',
+                            '사진첩 접근 허가를 해주세요~'
+                        )
+                    }
+                }
+            } catch (e){
+                Alert.alert('사진 허가 요청 에러', e.message());
+            }
+        })();
+    }, []);
+
+    /**
+     *
+     * @returns {Promise<void>}
+     * @private
+     * mediaTypes : 조회하는 자료의 타입
+     * allowsEditing: 이미지 선택 후 편집 단계 진행 여부
+     * aspect: 안드로이드 전용 옵션으로 이미지 편집 시 사각형의 비율
+     * quality 0 ~ 1 사이의 값을 받으며 압축 품질을 의미 (1: 최대 품질)
+     *
+     */
+    const _handleEditButton = async () => {
+        try {
+            const result = await ImagePicker.launchImageLibraryAsync({
+                mediaTypes : ImagePicker.MediaTypeOptions.Images,
+                allowsEditing: true,
+                aspect: [1, 1],
+                quality: 1,
+            });
+            console.log(result.uri);
+            if(!result.cancelled) {
+                onChangeImage(result.uri);
+            }
+        }catch (e) {
+            Alert.alert("사진 에러" , e.message());
+        }
+    };
     return (
         <Container>
             <StyledImage source={{uri: url }} style={imageStyle} rounded={rounded}/>
-            {showButton && <PhotoButton />}
+            {showButton && <PhotoButton onPress={_handleEditButton}/>}
         </Container>
     );
 };
@@ -63,13 +107,15 @@ const Image = ({ url, imageStyle, rounded, showButton, onChangeImage }) => {
 Image.defaultProps = {
     rounded: false,
     showButton: false,
-}
+    onChangeImage: () => {},
+};
 
 Image.prototype = {
     uri: PropTypes.string,
     imageStyle: PropTypes.object,
     rounded: PropTypes.bool,
     showButton: PropTypes.bool,
+    onChangeImage: PropTypes.func,
 }
 
 export default Image;
