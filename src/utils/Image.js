@@ -7,4 +7,5 @@ const prefix =
 
 export const images = {
     logo: `${prefix}/icon.png?alt=media`,
+    photo: `${prefix}/photo.jpg?alt=media`,
 };
