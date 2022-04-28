@@ -7,7 +7,7 @@ import Navigation from './navigations'
 import AppLoading from 'expo-app-loading';
 import * as Font from 'expo-font';
 import {theme } from './theme';
-import { ProgressProvider } from "./contexts/Progress";
+import { ProgressProvider, UserProvider } from "./contexts";
 
 /**
  * images을 매개변수로 받는다. map 함수를 사용하여 image가 string type이면 prefetch로 반환
@@ -45,10 +45,12 @@ const cacheFonts = fonts => {
         };
         return isReady ? (
             <ThemeProvider theme={theme}>
-                <ProgressProvider>
-                    <StatusBar barStyle='dark-content'/>
-                    <Navigation />
-                </ProgressProvider>
+                <UserProvider>
+                    <ProgressProvider>
+                        <StatusBar barStyle='dark-content'/>
+                        <Navigation />
+                    </ProgressProvider>
+                </UserProvider>
             </ThemeProvider>
         ) : (
             <AppLoading
