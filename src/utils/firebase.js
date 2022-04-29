@@ -57,7 +57,7 @@ export const logout = async () => {
 }
 
 export const getCurrentUser =  () => {
-    const {uid, displayName, photoURL} = Auth.currentUser;
+    const {uid, displayName, email, photoURL} = Auth.currentUser;
     return {uid, name: displayName, email, photoURL: photoURL};
 };
 

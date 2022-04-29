@@ -26,17 +26,43 @@ const Profile = () => {
     // 에러가 발생해도 user의 값을 빈값으로 변경한다. user의 값이 빈값이므로 AuthStack으로 변경한다.
     const _handleLogoutButtonPress = async () => {
         try {
+            spinner.start();
             await logout();
         } catch (e) {
             console.log("[프로필] 로그아웃 : " , e.message);
         }finally {
             dispatch({});
+            spinner.stop();
         }
     }
 
+    const _handlePhotoChange = async url => {
+        try {
+            spinner.start();
+            const updateUser = await updateUserPhoto(url);
+            setPhotoUrl(updateUser.photoUrl)
+        } catch (e) {
+            Alert.alert("PHOTO Error" , e.message);
+        }finally {
+            spinner.stop();
+        }
+    };
+
     return (
         <Container>
-            <Button title="logout" onPress={_handleLogoutButtonPress} />
+            <Image
+                url={photoUrl}
+                onChangeImage={_handlePhotoChange}
+                showButton
+                rounded
+            />
+            <Input label="Name" value={user.name} disabled />
+            <Input label="Email" value={user.email} disabled />
+            <Button
+                title="logout"
+                onPress={_handleLogoutButtonPress}
+                containerStyle={{ marginTop:30, backgroundColor:theme.buttonLogout}}
+            />
         </Container>
     );
 };
