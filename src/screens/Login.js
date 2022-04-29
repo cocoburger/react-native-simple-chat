@@ -7,7 +7,7 @@ import {login} from "../utils/firebase";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 import {validateEmail, removeWhitespace } from "../utils/Common";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
-import { ProgressContext} from "../contexts";
+import { ProgressContext, UserContext} from "../contexts";
 
 const Container = styled.View`
   flex: 1;
@@ -29,6 +29,7 @@ const ErrorText = styled.Text`
 
 const Login = ({ navigation }) => {
     const { spinner } = useContext(ProgressContext);
+    const { dispatch } = useContext(UserContext);
 
     const insets = useSafeAreaInsets();
         const [email, setEmail] = useState("");
@@ -63,7 +64,8 @@ const Login = ({ navigation }) => {
             try {
                 spinner.start();
                 const user = await login({email, password});
-                Alert.alert('Login 성공', user.email);
+                //로그인에 성공하면 UserContext에서 만든 dispatch 함수를 이용해 user의 상태가 인증된 사용자 정보로 변경해야 한다.
+                dispatch(user);
             } catch (e) {
                 Alert.alert('LOGIN Error', e.message());
             }finally {

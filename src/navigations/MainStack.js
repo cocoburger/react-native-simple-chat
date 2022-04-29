@@ -1,5 +1,4 @@
 import React, {useContext} from "react";
-import {Signup} from "../screens";
 import {Channel, ChannelCreation} from "../screens";
 import {createStackNavigator} from "@react-navigation/stack";
 import {ThemeContext} from "styled-components";

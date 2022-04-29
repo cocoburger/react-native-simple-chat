@@ -52,3 +52,20 @@ const uploadImage = async uri => {
 };
 
 
+export const logout = async () => {
+    return await Auth.signOut();
+}
+
+export const getCurrentUser =  () => {
+    const {uid, displayName, photoURL} = Auth.currentUser;
+    return {uid, name: displayName, email, photoURL: photoURL};
+};
+
+export const updateUserPhoto = async photoUrl => {
+    const user = Auth.currentUser;
+    const storageUrl = photoUrl.startsWith('https')
+        ? photoUrl
+        : await uploadImage(photoUrl);
+    await user.updateProfile({photoURL : storageUrl });
+    return { name: user.displayName, email:user.email, photoUrl: user.photoUrl };
+}

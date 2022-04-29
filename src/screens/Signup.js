@@ -6,7 +6,7 @@ import  { validateEmail, removeWhitespace } from "../utils/Common";
 import {images} from "../utils/Image";
 import {Alert} from 'react-native';
 import { signup } from "../utils/firebase";
-import {ProgressContext} from "../contexts/Progress";
+import {ProgressContext, UserContext} from "../contexts";
 
 const Container = styled.View`
   flex: 1;
@@ -35,6 +35,7 @@ const Signup = () => {
     const [errorMessage, setErrorMessage] = useState('');
     const [disabled, setDisabled] = useState(true);
     const {spinner} = useContext(ProgressContext);
+    const {dispatch} = useContext(UserContext);
     const emailRef = useRef();
     const passwordRef = useRef();
     const passwordConfirmRef = useRef();
@@ -76,8 +77,7 @@ const Signup = () => {
         try{
             spinner.start();
             const user = await signup({email,password, name, photoUrl});
-            console.log(user);
-            Alert.alert('회원가입 성공', user.email);
+            dispatch(user);
         } catch (e) {
             Alert.alert('회원가입 실패', e.message());
         }finally {
