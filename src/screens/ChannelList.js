@@ -3,6 +3,8 @@ import {FlatList} from "react-native";
 import styled, {ThemeContext} from "styled-components";
 import {MaterialIcons} from "@expo/vector-icons";
 import { DB } from '../utils/firebase';
+import moment from "moment";
+
 const Container = styled.View`
   flex:1;
   background-color: ${({ theme }) => theme.background};
@@ -45,6 +47,14 @@ for(let idx = 0; idx < 1000; idx++) {
     });
 }
 
+const getDataOrTime = ts => {
+    const now = moment().startOf('day');
+    const target = moment(ts).startOf('day');
+    // 생성날짜가 오늘과 같으면 시간을 렌더링, 하루 이상 차이나면 날짜를 렌더링
+    return moment(ts).format(now.diff(target, 'days') > 0 ? 'MM/DD' : 'HH:mm');
+};
+
+
 const Item = React.memo(({ item: {id, title, description, createAt}, onPress}) => {
         const theme = useContext(ThemeContext);
         console.log(`item: ${id}`)
@@ -54,7 +64,7 @@ const Item = React.memo(({ item: {id, title, description, createAt}, onPress}) =
                     <ItemTitle>{title}</ItemTitle>
                     <ItemDescription>{description}</ItemDescription>
                 </ItemTextContainer>
-                <ItemTime>{createAt}</ItemTime>
+                <ItemTime>{getDataOrTime(createAt)}</ItemTime>
                 <MaterialIcons
                     name="keyboard-arrow-right"
                     size={24}

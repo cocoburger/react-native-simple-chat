@@ -1,6 +1,8 @@
 import * as firebase from "firebase/compat";
 import config from '../../firebase.json';
 import 'firebase/firestore';
+import { getFirestore, collection, doc, setDoc } from 'firebase/firestore';
+
 const app = firebase.initializeApp(config);
 
 const Auth = app.auth();
@@ -86,3 +88,14 @@ export const createChannel = async ({title, description}) => {
     await newChannelRef.set(newChannel);
     return id;
 }
+
+export const createMessage = async ({ channelID, message }) => {
+    return await DB.collection('channels')
+        .doc(channelID)
+        .collection('messages')
+        .doc(message._id)
+        .set({
+            ...message,
+            createAt:Date.now(),
+        });
+    };
