@@ -54,14 +54,13 @@ const Image = ({ url, imageStyle, rounded, showButton, onChangeImage }) => {
     useEffect(() => {
         (async () => {
             try {
-                if(Platform.OS === 'ios') {
-                    const {status} =  await MediaLibrary.requestPermissionsAsync();
-
+                if(Platform.OS !== 'web') {
+                    const {status} =  await ImagePicker.requestMediaLibraryPermissionsAsync();
                     if(status !== 'granted') {
                         Alert.alert(
                             '사진 허가',
                             '사진첩 접근 허가를 해주세요~'
-                        )
+                        );
                     }
                 }
             } catch (e){
@@ -71,14 +70,10 @@ const Image = ({ url, imageStyle, rounded, showButton, onChangeImage }) => {
     }, []);
 
     /**
-     *
-     * @returns {Promise<void>}
-     * @private
      * mediaTypes : 조회하는 자료의 타입
      * allowsEditing: 이미지 선택 후 편집 단계 진행 여부
      * aspect: 안드로이드 전용 옵션으로 이미지 편집 시 사각형의 비율
      * quality 0 ~ 1 사이의 값을 받으며 압축 품질을 의미 (1: 최대 품질)
-     *
      */
     const _handleEditButton = async () => {
         try {
@@ -88,12 +83,11 @@ const Image = ({ url, imageStyle, rounded, showButton, onChangeImage }) => {
                 aspect: [1, 1],
                 quality: 1,
             });
-            console.log(result.uri);
             if(!result.cancelled) {
                 onChangeImage(result.uri);
             }
         }catch (e) {
-            Alert.alert("사진 에러" , e.message());
+            Alert.alert("사진 에러" , e.message);
         }
     };
     return (

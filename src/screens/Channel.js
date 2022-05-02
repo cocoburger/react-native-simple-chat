@@ -8,10 +8,12 @@ const Container = styled.View`
 `;
 
 
-const Channel = () => {
+const Channel = ({route}) => {
+
     return (
         <Container>
-            <Text style={{ fontSize : 24}}>Channel</Text>
+            <Text style={{ fontSize : 24}}>ID: {route.params?.id}</Text>
+            <Text style={{ fontSize : 24}}>제목: {route.params?.title}</Text>
         </Container>
     );
 };

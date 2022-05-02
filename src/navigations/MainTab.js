@@ -1,14 +1,14 @@
-import React, { useContext } from 'react';
+import React, {useContext, useEffect} from 'react';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {MaterialIcons} from "@expo/vector-icons";
 import {ThemeContext} from "styled-components";
 import {Profile, ChannelList} from '../screens';
+import {getFocusedRouteNameFromRoute} from "@react-navigation/native";
 
 const Tab = createBottomTabNavigator();
 
 
 const TabBarIcon = ({ focused, name }) => {
-    console.log(name);
     const theme = useContext(ThemeContext);
 
     return (
@@ -20,9 +20,24 @@ const TabBarIcon = ({ focused, name }) => {
     );
 };
 
-const MainTab = () => {
+const MainTab = ({navigation, route}) => {
     const theme = useContext(ThemeContext);
     {/*name의 색상을 focused 여부에 따라서 변경해준다.*/}
+    useEffect(() => {
+        const title = getFocusedRouteNameFromRoute(route) ?? 'Channels';
+        navigation.setOptions({
+            headerTitle: title,
+            headerRight: () =>
+                title === 'Channels' && (
+                    <MaterialIcons
+                        name="add"
+                        size={26}
+                        style={{margin: 10}}
+                        onPress={() => navigation.navigate("Channel Creation")}
+                    />
+                )
+        });
+    }, [route]);
     return (
         <Tab.Navigator
             screenOptions={{
@@ -32,7 +47,7 @@ const MainTab = () => {
             }}
         >
             <Tab.Screen
-                name='Channel List'
+                name='Channels'
                 component={ChannelList}
                 options={{
                     tabBarIcon: ({ focused}) =>

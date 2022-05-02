@@ -1,9 +1,11 @@
 import * as firebase from "firebase/compat";
 import config from '../../firebase.json';
-
+import 'firebase/firestore';
 const app = firebase.initializeApp(config);
 
 const Auth = app.auth();
+
+export const DB = firebase.firestore();
 
 export const login = async ({ email, password }) => {
     const {user} = await Auth.signInWithEmailAndPassword(email,password);
@@ -46,7 +48,6 @@ const uploadImage = async uri => {
     const user = Auth.currentUser;
     const ref = app.storage().ref(`/profile/${user.uid}/photo.png`);
     const snapshot = await ref.put(blob, {contentType:'image/png' });
-    console.log('snapshot', snapshot);
     blob.close();
     return await snapshot.ref.getDownloadURL();
 };
@@ -68,4 +69,20 @@ export const updateUserPhoto = async photoUrl => {
         : await uploadImage(photoUrl);
     await user.updateProfile({photoURL : storageUrl });
     return { name: user.displayName, email:user.email, photoUrl: user.photoUrl };
+}
+
+// collection에서 문서를 생성할 때 id를 지정하지 않으면, firestore에서 자동으로 중복되지 않는 id를 생성해 문서의 id로 사용한다.
+// 자동으로 생성된 문서의 id는 뭔서의 필드로도 저장하고, 사용자에게 입력받은 채널의 제목과 설명을 필드로 사용.
+// 채널이 생성된 시간을 함수가 호출된 시점의 타임스탬프로 저장.
+export const createChannel = async ({title, description}) => {
+    const newChannelRef = DB.collection('channels').doc();
+    const id = newChannelRef.id;
+    const newChannel = {
+        id,
+        title,
+        description,
+        createAt: Date.now(),
+    };
+    await newChannelRef.set(newChannel);
+    return id;
 }
