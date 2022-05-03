@@ -6,6 +6,7 @@ import  Input  from '../components/Input';
 import {Alert} from "react-native";
 import {GiftedChat, Send} from 'react-native-gifted-chat';
 import { MaterialIcons} from "@expo/vector-icons";
+import moment from "moment";
 
 const Container = styled.View`
   flex:1;
@@ -41,15 +42,13 @@ const SendButton = props => {
 const Channel = ({navigation, route }) => {
     const theme = useContext(ThemeContext);
     const {uid, name, photoURL} = getCurrentUser();
-    console.log(photoURL);
-    console.log(getCurrentUser());
     const [messages, setMessages] = useState([]);
 
     useEffect(() => {
         const unsubscribe = DB.collection('channels')
             .doc(route.params.id)
             .collection('messages')
-            .orderBy('createAt', 'desc')
+            .orderBy('createdAt', 'desc')
             .onSnapshot(snapshot => {
                 const list = [];
                 snapshot.forEach(doc => {
@@ -61,6 +60,7 @@ const Channel = ({navigation, route }) => {
     }, []);
 
     const _handleMessageSend = async messageList => {
+        console.log('messageList : ', messageList);
         const newMessage = messageList[0];
         try{
             await createMessage({ channelID: route.params.id, message:newMessage});
@@ -68,6 +68,8 @@ const Channel = ({navigation, route }) => {
             Alert.alert('Send Message Error', e.message);
         }
     };
+
+
 
     useLayoutEffect(() => {
         navigation.setOptions({headerTitle: route.params.title || 'Channel'});

@@ -96,6 +96,6 @@ export const createMessage = async ({ channelID, message }) => {
         .doc(message._id)
         .set({
             ...message,
-            createAt:Date.now(),
+            createdAt:Date.now(),
         });
     };
